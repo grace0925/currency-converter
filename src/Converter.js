@@ -10,8 +10,8 @@ import ConverterGraph from './ConverterGraph';
 //https://exchangeratesapi.io/
 // TODO: add tooltips to options
 // TODO: rounding 
-// TODO: better layouts
 // TODO: currency change diagrams 
+// TODO: title should go on top of diagrams
 
 class Converter extends Component {
 
@@ -33,11 +33,11 @@ class Converter extends Component {
                         title= "Currency Converter"
                         subheader="Free live exchange calculator"
                     />
-                    <div className="row">
-                        <div className="col-8">
+                    <div className="row align-items-end">
+                        <div className="col-7">
                             <ConverterContent date={this.state.date}/>
                         </div>
-                        <div className="col-4">
+                        <div className="col-3 mb-5">
                             <ConverterGraph date={this.state.date}/>
                         </div>
                     </div>

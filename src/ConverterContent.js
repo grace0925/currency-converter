@@ -82,7 +82,7 @@ class ConverterContent extends Component {
                     <h5>On {day}</h5>
                     <h4>{baseAmount} {baseCurr} is equivalent to {resultAmount} {resultCurr}</h4>
                     <div className="row">
-                        <div className="col-lg-8">
+                        <div className="col-lg-8 mr-3">
                             <form className="form-inline mt-3 mb-4">
                                 <div className="form-group">
                                     <input type="number" value={baseAmount} step="0.01" min="0.00" placeholder="1.00" className="form-control mx-3" 
