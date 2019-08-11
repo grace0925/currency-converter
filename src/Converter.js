@@ -14,6 +14,7 @@ import IosRefresh from 'react-ionicons/lib/IosRefresh'
 // TODO: add tooltips to options
 // TODO: rounding 
 // TODO: better layouts
+// TODO: currency change diagrams 
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -42,15 +43,22 @@ class Converter extends Component {
 }
 
 class ConverterContent extends Component {
-    state={
-        currencies: ['USD', 'CAD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CNY', 'HKD', 'KRW', 'INR', 'SGD'],
-        baseCurr: 'CAD',
-        baseAmount: '',
-        resultCurr: 'USD',
-        resultAmount: '',
-        date: '',
-        done: true,
+    constructor() {
+        super()
+        var today = new Date()
+        let day = today.getFullYear() + '-' + (today.getMonth() + 1 )+ '-' + today.getDate();
+        console.log('day =>', day )
+        this.state={
+            currencies: ['USD', 'CAD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CNY', 'HKD', 'KRW', 'INR', 'SGD'],
+            baseCurr: 'CAD',
+            baseAmount: '',
+            resultCurr: 'USD',
+            resultAmount: '',
+            day: day,
+            done: true,
+        }
     }
+
     handleSelect = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -88,22 +96,21 @@ class ConverterContent extends Component {
             fetch(`https://api.exchangeratesapi.io/latest?base=${this.state.baseCurr}`)
             .then(response => response.json())
             .then(data => {
-                const date = data.date
                 const resultAmount = (data.rates[this.state.resultCurr] * this.state.baseAmount).toFixed(2)
                 const done = true;
                 this.setState({
-                    date, resultAmount, done
+                    resultAmount, done,
                 })
             })
         }
     }
     render() {
-        const {currencies, baseCurr, baseAmount, resultCurr, resultAmount, date, done} = this.state
+        const {currencies, baseCurr, baseAmount, resultCurr, resultAmount, day, done} = this.state
         return (
             <div>
                 {done ? (
                 <CardContent>
-                    <h5>On {date}</h5>
+                    <h5>On {day}</h5>
                     <h4>{baseAmount} {baseCurr} is equivalent to {resultAmount} {resultCurr}</h4>
                     <div className="row justify-content-center">
                         <div className="col-lg-5">
