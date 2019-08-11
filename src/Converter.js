@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import {MdSwapVert} from 'react-icons/md'
+import { render } from 'react-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Flag from 'react-flagkit'
+import Flag from 'react-flagkit';
+import IosRefresh from 'react-ionicons/lib/IosRefresh'
 //exchange rate api 
 //https://exchangeratesapi.io/
 
@@ -17,6 +19,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 class Converter extends Component {
+
     render() {
 
         return(
@@ -27,6 +30,7 @@ class Converter extends Component {
                         subheader="Free live exchange calculator"
                     />
                     <ConverterContent />
+                    
                 </Card>
             </div>
             
@@ -42,6 +46,7 @@ class ConverterContent extends Component {
         resultCurr: 'USD',
         resultAmount: '',
         date: '',
+        done: true,
     }
     handleSelect = (e) => {
         this.setState({
@@ -52,7 +57,8 @@ class ConverterContent extends Component {
     handleInput = (e) => {
         console.log("handle input ")
         this.setState({
-            baseAmount: e.target.value
+            baseAmount: e.target.value,
+            done: false,
         })
         this.calcResult()
     }
@@ -60,12 +66,14 @@ class ConverterContent extends Component {
         const baseCurr = this.state.baseCurr
         const resultCurr = this.state.resultCurr
         const resultAmount = this.state.resultAmount
+        const done = false
         e.preventDefault()
         this.setState({
             baseCurr: resultCurr,
             resultCurr: baseCurr,
             baseAmount: resultAmount,
             resultAmount: '',
+            done
         })
         process.nextTick(() => {
             this.calcResult()
@@ -83,19 +91,19 @@ class ConverterContent extends Component {
             .then(response => response.json())
             .then(data => {
                 const date = data.date
-                console.log("result curr => ", this.state.resultCurr)
-                console.log("base amount => ", this.state.baseAmount)
                 const resultAmount = (data.rates[this.state.resultCurr] * this.state.baseAmount).toFixed(2)
+                const done = true;
                 this.setState({
-                    date, resultAmount
+                    date, resultAmount, done
                 })
             })
         }
     }
     render() {
-        const {currencies, baseCurr, baseAmount, resultCurr, resultAmount, date} = this.state
+        const {currencies, baseCurr, baseAmount, resultCurr, resultAmount, date, done} = this.state
         return (
-<CardContent>
+            <div>
+                {done ? (<CardContent>
         <h5>On {date}</h5>
         <h4>{baseAmount} {baseCurr} is equivalent to {resultAmount} {resultCurr}</h4>
         <div className="row justify-content-center">
@@ -137,7 +145,9 @@ class ConverterContent extends Component {
                 </div>
             </div>
         </div>
-    </CardContent>
+    </CardContent>) : (<IosRefresh fontSize="60px" color="#347eff" rotate={true} />
+)}
+            </div>
         ) 
     }
 }
