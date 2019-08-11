@@ -1,9 +1,20 @@
 import React, { Component } from 'react'
 import {MdSwapVert} from 'react-icons/md'
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Flag from 'react-flagkit'
 //exchange rate api 
 //https://exchangeratesapi.io/
 
-
+const useStyles = makeStyles(theme => ({
+    card: {
+        maxWidth: 345,
+    }
+}))
 
 class Converter extends Component {
     state={
@@ -67,41 +78,55 @@ class Converter extends Component {
         const {currencies, baseCurr, baseAmount, resultCurr, resultAmount, date} = this.state
         return(
             <div className="row">
-                <div className="card card-body col-6 mx-auto mt-4">
-                    <h5>On {date}</h5>
-                    <h4>{baseAmount} {baseCurr} is equivalent to {resultAmount} {resultCurr}</h4>
-                    <div className="row justify-content-center">
-                        <div className="col-lg-5">
-                            <form className="form-inline mt-3 mb-4 mx-auto">
-                                <div className="form-group">
-                                    <input type="number" value={baseAmount} step="0.01" min="0.00" placeholder="1.00" className="form-control mx-3" 
-                                            onChange={this.handleInput}>
-                                    </input>
-                                    <select name="baseCurr" value={baseCurr} className="form-control"
-                                            onChange={this.handleSelect}>
-                                        {currencies.map(currency => 
-                                            <option key={currency} value={currency.substring(0,3)}>{currency}</option>
-                                        )}
-                                    </select>
+                <Card className="classes.Name col-6 mx-auto mt-4">
+                    <CardHeader 
+                        title= "Currency Converter"
+                        subheader="Free live exchange calculator"
+                    />
+                    <CardContent>
+                        <h5>On {date}</h5>
+                        <h4>{baseAmount} {baseCurr} is equivalent to {resultAmount} {resultCurr}</h4>
+                        <div className="row justify-content-center">
+                            <div className="col-lg-5">
+                                <form className="form-inline mt-3 mb-4 mx-auto">
+                                    <div className="form-group">
+                                        <input type="number" value={baseAmount} step="0.01" min="0.00" placeholder="1.00" className="form-control mx-3" 
+                                                onChange={this.handleInput}>
+                                        </input>
+                                        <select name="baseCurr" value={baseCurr} className="form-control"
+                                                onChange={this.handleSelect}>
+                                            {currencies.map(currency => 
+                                                <option key={currency} value={currency.substring(0,3)}>{currency}</option>
+                                            )}
+                                        </select>
+                                    </div>
+                                </form>
+                                <form className="form-inline mb-4">
+                                    <div className="form-group">
+                                        <input disabled={true} value={resultAmount} className="form-control mx-3"></input>
+                                        <select name="resultCurr" value={resultCurr} className="form-control"
+                                                onChange={this.handleSelect}>
+                                            {currencies.map(currency => 
+                                                <option key={currency} value={currency}>{currency}</option>    
+                                            )}
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="col-lg-2 ml-5 align-self-center mb-2">
+                                <div className="row mb-1">
+                                    <Flag country={this.state.baseCurr.substring(0,2)}/>
                                 </div>
-                            </form>
-                            <form className="form-inline mb-4">
-                                <div className="form-group">
-                                    <input disabled={true} value={resultAmount} className="form-control mx-3"></input>
-                                    <select name="resultCurr" value={resultCurr} className="form-control"
-                                            onChange={this.handleSelect}>
-                                        {currencies.map(currency => 
-                                            <option key={currency} value={currency}>{currency}</option>    
-                                        )}
-                                    </select>
+                                <div className="row">
+                                    <MdSwapVert onClick={this.handleSwap} size="35"/>
                                 </div>
-                            </form>
+                                <div className="row">
+                                    <Flag country={this.state.resultCurr.substring(0,2)}/>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-lg-2 ml-3 align-self-center">
-                            <MdSwapVert onClick={this.handleSwap} size="45"/>
-                        </div>
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
             </div>
             
         )
